@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <!--<PackageReference Include="CS.OperationLog.Audit.EfCore" Version="1.3.1" />-->
+        <!--<PackageReference Include="CS.Sdk.Commons.Extensions" Version="1.3.0" />-->
+        <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.3" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.3" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\CS.Identity.Domain\CS.Identity.Domain.csproj" />
+        <ProjectReference Include="..\IM.IdentityService.Domain\IM.IdentityService.Domain.csproj" />
+    </ItemGroup>
+</Project>
