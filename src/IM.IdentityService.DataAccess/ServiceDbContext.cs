@@ -6,14 +6,15 @@ using Microsoft.Extensions.Logging;
 
 namespace IM.IdentityService.DataAccess;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationUserRole, int>
+public sealed class ServiceDbContext : IdentityDbContext<ApplicationUser, ApplicationUserRole, Guid>
 {
     public DbContext AppDbContext => this;
     public DbSet<ApplicationUser> Users { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<Totp> Totp { get; set; }
+    public DbSet<Application> Applications { get; set; }
 
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    public ServiceDbContext(DbContextOptions<ServiceDbContext> options)
         : base(options)
     {
     }
@@ -21,22 +22,34 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Applicati
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseLoggerFactory(GetDbLoggerFactory()).EnableSensitiveDataLogging();
+        optionsBuilder.EnableDetailedErrors();
+        base.OnConfiguring(optionsBuilder);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ServiceDbContext).Assembly);
+        modelBuilder.HasPostgresExtension("uuid-ossp");
         modelBuilder.HasDefaultSchema("public");
         base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.Entity<RefreshToken>()
+            .HasOne<ApplicationUser>();
         
         modelBuilder.Entity<ApplicationUser>()
             .HasIndex(q => q.NormalizedUserName);
         
         modelBuilder.Entity<ApplicationUser>()
             .HasIndex(q => q.NormalizedEmail);
+        
+        modelBuilder.Entity<ApplicationUser>()
+            .HasMany<Application>();
+        
+        modelBuilder.Entity<Application>()
+            .HasMany<ApplicationUser>();
     }
 
-    private static ILoggerFactory GetDbLoggerFactory()
+    private static ILoggerFactory? GetDbLoggerFactory()
     {
         IServiceCollection serviceCollection = new ServiceCollection();
         serviceCollection.AddLogging(builder =>

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="IM.Common.Grpc" Version="0.0.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
+      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.7" />
+      <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.22.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\IM.IdentityService.Business\IM.IdentityService.Business.csproj" />
+      <ProjectReference Include="..\IM.IdentityService.Common\IM.IdentityService.Common.csproj" />
+    </ItemGroup>
+
+</Project>

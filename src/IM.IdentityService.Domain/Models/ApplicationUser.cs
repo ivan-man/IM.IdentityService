@@ -1,19 +1,17 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using IM.Common.Models.Domain;
+using IM.IdentityService.Common.Enums;
 using Microsoft.AspNetCore.Identity;
 
 namespace IM.IdentityService.Domain.Models;
 
-public class ApplicationUser : IdentityUser<int>, IEntity<int>
+public class ApplicationUser : IdentityUser<Guid>, IBaseEntity<Guid>
 {
-    [MaxLength(64)]
-    public string NickName { get; set; }
-    
-    [MaxLength(64)]
-    public string NormalizedNickName { get; set; }
-    
-    // public int UserId { get; set; }
-    // public User User { get; set; }
-    
+    /// <summary>
+    /// <inheritdoc cref="IdentityUser.UserName"/>
+    /// </summary>
+    public ConfirmationType DefaultConfirmationType { get; set; }
+
     /// <summary>
     /// <inheritdoc cref="IdentityUser.UserName"/>
     /// </summary>
@@ -26,19 +24,19 @@ public class ApplicationUser : IdentityUser<int>, IEntity<int>
     [ProtectedPersonalData]
     [MaxLength(64)]
     public override string NormalizedUserName { get; set; }
-    
+
     [ProtectedPersonalData]
-    [MaxLength(125)]
+    [MaxLength(128)]
     public string? FirstName { get; set; }
 
     [ProtectedPersonalData]
-    [MaxLength(125)]
+    [MaxLength(128)]
     public string? MiddleName { get; set; }
 
     [ProtectedPersonalData]
-    [MaxLength(125)]
+    [MaxLength(128)]
     public string? LastName { get; set; }
-    
+
     /// <summary>
     /// <inheritdoc cref="IdentityUser{string}.Email"/>
     /// </summary>
@@ -50,12 +48,18 @@ public class ApplicationUser : IdentityUser<int>, IEntity<int>
     /// <inheritdoc cref="IdentityUser{string}.NormalizedEmail"/>
     /// </summary>
     [ProtectedPersonalData]
-    [MaxLength(255)]
+    [MaxLength(250)]
     public override string? NormalizedEmail { get; set; }
-    
-    [ProtectedPersonalData]
-    public DateTime? DateOfBirth { get; set; }
+
+    [MaxLength(2)] public string? CountryIso2 { get; set; }
+    [MaxLength(3)] public string? CountryIso3 { get; set; }
+
+    public bool? IsDisabled { get; set; }
+
+    [ProtectedPersonalData] public DateTime? DateOfBirth { get; set; }
 
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
+
+    public List<Application> Applications { get; set; }
 }

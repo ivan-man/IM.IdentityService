@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\IM.IdentityService.Common\IM.IdentityService.Common.csproj" />
+      <ProjectReference Include="..\IM.IdentityService.DataAccess\IM.IdentityService.DataAccess.csproj" />
+      <ProjectReference Include="..\IM.IdentityService.Domain\IM.IdentityService.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="FluentValidation" Version="11.1.0" />
+      <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.1.0" />
+      <PackageReference Include="IM.Common.Models" Version="0.0.6" />
+      <PackageReference Include="MediatR" Version="10.0.1" />
+      <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+      <PackageReference Include="Otp.NET" Version="1.2.2" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.22.0" />
+    </ItemGroup>
+
+</Project>

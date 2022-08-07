@@ -2,11 +2,11 @@
 
 public class Totp
 {
-    public int UserId { get; set; }
-    public long Id { get; set; }
+    public Guid UserId { get; set; }
+    public int Id { get; set; }
     public string HashTopt { get; set; }
     public string Token { get; set; }
-    public long TimeToLive { get; set; }
+    public DateTime? Expired { get; set; }
     public DateTime Created { get; set; }
     public bool IsActive { get; set; }
 }

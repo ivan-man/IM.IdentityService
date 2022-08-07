@@ -7,7 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.6" />
+      <PackageReference Include="IM.Common.Models" Version="0.0.6" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\IM.IdentityService.Common\IM.IdentityService.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Extensions" />
     </ItemGroup>
 
 </Project>
