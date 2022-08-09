@@ -29,38 +29,44 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _logger = logger;
     }
 
-    public async Task<TokenModel> Generate(ApplicationUser user, bool? temp,
+    public async Task<TokenModel> Generate(ApplicationUser user, bool? temp = false,
         CancellationToken cancellationToken = default)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(temp ?? false ? _jwtConfig.SecretTemp : _jwtConfig.Secret);
         var roles = await _userManager.GetRolesAsync(user);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email!),
-            new Claim(JwtRegisteredClaimNames.PhoneNumber, user.PhoneNumber),
-            new Claim(ApplicationClaims.UserId, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString("O")),
-        }.Concat(roles.Select(e => new Claim(ClaimTypes.Role, e)));
+            new(ApplicationClaims.UserId, user.Id.ToString()),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(JwtRegisteredClaimNames.Iat, DateTime.UtcNow.ToString("O")),
+        };
+        
+        // if (!string.IsNullOrWhiteSpace(user.Email))
+        //     claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email!));
+        //
+        // if (!string.IsNullOrWhiteSpace(user.PhoneNumber))
+        //     claims.Add(new Claim(JwtRegisteredClaimNames.PhoneNumber, user.PhoneNumber));
+
+        claims.AddRange(roles.Select(e => new Claim(ClaimTypes.Role, e)));
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
+            Issuer = "im",
             Expires = DateTime.UtcNow.AddMinutes(temp ?? false ? _jwtConfig.TempTtl : _jwtConfig.AccessTtl),
-            
+
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key),
                 SecurityAlgorithms.HmacSha256Signature),
-            
+
             AdditionalHeaderClaims = new Dictionary<string, object>
                 { { "subType", temp ?? false ? "temp" : "bearer" } },
-            
+
             Subject = new ClaimsIdentity(claims),
         };
 
         var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-
         var jwtToken = jwtTokenHandler.WriteToken(token);
 
         return new TokenModel
@@ -92,17 +98,18 @@ public class JwtTokenGenerator : IJwtTokenGenerator
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuerSigningKey = true,
                 ValidateAudience = false,
-                ValidateLifetime = true,
+                ValidateLifetime = false, //ToDo
                 RequireSignedTokens = true,
-                RequireExpirationTime = true
+                ValidIssuer = "im",
+                RequireExpirationTime = false, //ToDo
             }, out var validatedToken);
 
             var jwtToken = (JwtSecurityToken)validatedToken;
 
-            var userId = int.Parse(jwtToken.Claims.First(x => x.Type == ApplicationClaims.UserId).Value);
+            var userId = Guid.Parse(jwtToken.Claims.First(x => x.Type == ApplicationClaims.UserId).Value);
 
             return Task.FromResult(
-                userId >= 0 && (DateTime.UtcNow - jwtToken.IssuedAt).TotalSeconds < _jwtConfig.AccessTtl * 60
+                userId != Guid.Empty && (DateTime.UtcNow - jwtToken.IssuedAt).TotalSeconds < _jwtConfig.AccessTtl * 60
                     ? Result.Ok()
                     : Result.UnAuthorized("User id is not valid"));
         }

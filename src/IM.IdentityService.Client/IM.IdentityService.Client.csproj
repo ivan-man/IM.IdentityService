@@ -7,14 +7,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="IM.Common.Grpc" Version="0.0.1" />
+      <PackageReference Include="IM.Common.Grpc" Version="0.0.2" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
       <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.7" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+      <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.152" />
+      <PackageReference Include="protobuf-net.Grpc.AspNetCore.Reflection" Version="1.0.152" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.22.0" />
+      <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,4 +1,6 @@
+using IM.IdentityService.Api.Services;
 using IM.IdentityService.Business;
+using ProtoBuf.Grpc.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddBusiness(builder.Configuration);
+
+builder.Services
+    .AddCodeFirstGrpcReflection()
+    .AddCodeFirstGrpc();;
 
 var app = builder.Build();
 
@@ -25,5 +31,8 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapGrpcService<IdentityService>();
+app.MapCodeFirstGrpcReflectionService();
 
 app.Run();

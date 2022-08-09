@@ -71,12 +71,12 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<Response
             //ToDo send email/sms 
         }
         
-        var access = await _tokenGenerator.Generate(user, true, cancellationToken);
+        var access = await _tokenGenerator.Generate(user, cancellationToken: cancellationToken);
         // var totp = await _totpGenerator.GenerateToken(user, cancellationToken: cancellationToken);
         
         return Result<ResponseToken>.Ok(new ResponseToken
         {
-            IsNeed2FA = true,
+            IsNeed2FA = user.TwoFactorEnabled,
             AccessToken = access.Token,
             // Hash = totp.Hash
         });

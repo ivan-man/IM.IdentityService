@@ -32,21 +32,24 @@ public sealed class ServiceDbContext : IdentityDbContext<ApplicationUser, Applic
         modelBuilder.HasPostgresExtension("uuid-ossp");
         modelBuilder.HasDefaultSchema("public");
         base.OnModelCreating(modelBuilder);
-        
+
         modelBuilder.Entity<RefreshToken>()
             .HasOne<ApplicationUser>();
-        
+
         modelBuilder.Entity<ApplicationUser>()
             .HasIndex(q => q.NormalizedUserName);
-        
+
         modelBuilder.Entity<ApplicationUser>()
             .HasIndex(q => q.NormalizedEmail);
+
+        modelBuilder.Entity<ApplicationUsing>()
+            .HasKey(q => new { q.ApplicationUserId, q.ApplicationId });
+
+        modelBuilder.Entity<ApplicationUsing>()
+            .HasIndex(q => new { q.ApplicationUserId });
         
-        modelBuilder.Entity<ApplicationUser>()
-            .HasMany<Application>();
-        
-        modelBuilder.Entity<Application>()
-            .HasMany<ApplicationUser>();
+        modelBuilder.Entity<ApplicationUsing>()
+            .HasIndex(q => new { q.ApplicationId });
     }
 
     private static ILoggerFactory? GetDbLoggerFactory()

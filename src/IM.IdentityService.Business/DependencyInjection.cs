@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using IM.Common.MediatR;
+using IM.IdentityService.Business.Configuration;
 using IM.IdentityService.Business.InternalServices.Tokens;
 using IM.IdentityService.Business.InternalServices.Users;
 using IM.IdentityService.DataAccess;
@@ -15,9 +17,8 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         services
-            .AddMediatR(typeof(Bootstrap).Assembly)
-            // .AddTransient(typeof(IPipelineBehavior<,>))
-            .AddValidatorsFromAssembly(typeof(Bootstrap).Assembly)
+            .Configure<JwtConfig>(e => configuration.GetSection("jwtConfig").Bind(e))
+            .AddImMediatr(typeof(DependencyInjection))
             .AddScoped<ICurrentUserService, CurrentUserService>()
             .AddScoped<IJwtTokenGenerator, JwtTokenGenerator>()
             .AddDataAccess(configuration);

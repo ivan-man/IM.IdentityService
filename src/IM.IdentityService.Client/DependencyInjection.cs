@@ -17,7 +17,7 @@ public static class DependencyInjection
 {
     private const string DefaultSection = "Identity:url";
 
-    public static IServiceCollection AddIdentityClient(
+    public static IServiceCollection AddImIdentityClient(
         this IServiceCollection services,
         IConfiguration configuration,
         string sectionName = DefaultSection)

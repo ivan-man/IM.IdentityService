@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="IM.Common.EF" Version="0.0.6" />
+        <PackageReference Include="IM.Common.EF" Version="0.0.7" />
         <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.7" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.7">
@@ -20,7 +20,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
         <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="6.0.7" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.5" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
         <PackageReference Include="System.Linq.Dynamic.Core" Version="1.2.19" />
     </ItemGroup>
 

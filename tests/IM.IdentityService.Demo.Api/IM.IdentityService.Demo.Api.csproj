@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>dafb5e33-07f4-4c60-88f1-b1e7924ce38f</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="IM.Common.Models" Version="0.0.6" />
+        <PackageReference Include="IM.Common.Redis.DistributedCache" Version="0.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.7" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\IM.IdentityService.Client\IM.IdentityService.Client.csproj" />
+      <ProjectReference Include="..\..\src\IM.IdentityService.Common\IM.IdentityService.Common.csproj" />
+    </ItemGroup>
+
+</Project>

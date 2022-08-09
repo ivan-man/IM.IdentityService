@@ -61,5 +61,5 @@ public class ApplicationUser : IdentityUser<Guid>, IBaseEntity<Guid>
     public DateTime Created { get; set; }
     public DateTime? Updated { get; set; }
 
-    public List<Application> Applications { get; set; }
+    public List<ApplicationUsing> ApplicationUsings { get; set; }
 }

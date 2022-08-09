@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace IM.IdentityService.DataAccess;
 
-public static class Bootstrap
+public static class DependencyInjection
 {
     public static IServiceCollection AddDataAccess(
         this IServiceCollection services, IConfiguration configuration, string connectionStringName = "default")
@@ -24,10 +24,10 @@ public static class Bootstrap
         services.AddIdentity<ApplicationUser, ApplicationUserRole>(options =>
             {
                 options.User.RequireUniqueEmail = true;
-                // options.Password.RequireDigit = false;
-                // options.Password.RequireLowercase = false;
-                // options.Password.RequireNonAlphanumeric = false;
-                // options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
                 // options.SignIn.RequireConfirmedPhoneNumber = true;
             })
             .AddEntityFrameworkStores<ServiceDbContext>()

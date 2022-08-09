@@ -1,9 +1,10 @@
 ﻿using IM.Common.Models;
 using IM.IdentityService.Business.InternalServices.Tokens;
+using MediatR;
 
 namespace IM.IdentityService.Business.Features.TokenValidation;
 
-public class ValidateTokenCommandHandler
+public class ValidateTokenCommandHandler : IRequestHandler<ValidateTokenCommand, Result>
 {
     private readonly IJwtTokenGenerator _jwtGenerator;
 

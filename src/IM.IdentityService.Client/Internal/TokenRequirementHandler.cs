@@ -40,7 +40,6 @@ public class TokenRequirementHandler : AuthorizationHandler<TokenRequirement>
             return;
         }
 
-
         var jwt = ReadToken(tokenViewModel.Token);
         if (jwt is null)
         {
