@@ -6,6 +6,10 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <UserSecretsId>34093f00-9153-4139-a015-30e416a2c011</UserSecretsId>
+        <PackageVersion>0.0.2</PackageVersion>
+        <Authors>ivan-man</Authors>
+        <PackageProjectUrl>https://github.com/ivan-man/IM.IdentityService</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/ivan-man/IM.IdentityService</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
