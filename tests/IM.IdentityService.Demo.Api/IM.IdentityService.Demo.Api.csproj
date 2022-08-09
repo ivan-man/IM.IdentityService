@@ -11,6 +11,7 @@
     <ItemGroup>
         <PackageReference Include="IM.Common.Models" Version="0.0.6" />
         <PackageReference Include="IM.Common.Redis.DistributedCache" Version="0.0.1" />
+        <PackageReference Include="IM.IdentityService.Client" Version="0.0.4" />
         <PackageReference Include="IM.IdentityService.Common" Version="0.0.3" /> 
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.7" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
