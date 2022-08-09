@@ -1,4 +1,4 @@
-﻿namespace IM.IdentityService.Business.Models;
+﻿namespace IM.IdentityService.Client.Internal.Users;
 
 public interface ICurrentUser
 {

@@ -2,8 +2,8 @@
 using System.Text.Json;
 using IM.Common.Grpc;
 using IM.Common.Models;
-using IM.IdentityService.Business.InternalServices.Users;
 using IM.IdentityService.Client.Internal;
+using IM.IdentityService.Client.Internal.Users;
 using IM.IdentityService.Common.Consts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;

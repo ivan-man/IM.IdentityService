@@ -1,12 +1,11 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using IM.IdentityService.Business.Models;
 using IM.IdentityService.Common.Consts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
-namespace IM.IdentityService.Business.InternalServices.Users;
+namespace IM.IdentityService.Client.Internal.Users;
 
 public class CurrentUserService : ICurrentUserService
 {
@@ -27,7 +26,9 @@ public class CurrentUserService : ICurrentUserService
 
     private string? GetJwtFromHttpContext()
     {
-        if (!_contextAccessor.HttpContext?.Request.Headers.TryGetValue("Authorization", out var authHeader) ?? false)
+        StringValues authHeader = string.Empty;
+        
+        if (!_contextAccessor.HttpContext?.Request.Headers.TryGetValue("Authorization", out authHeader) ?? false)
             _contextAccessor.HttpContext?.Request.Query.TryGetValue("access_token", out authHeader);
 
         return string.IsNullOrWhiteSpace(authHeader.ToString())

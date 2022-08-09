@@ -11,14 +11,10 @@
     <ItemGroup>
         <PackageReference Include="IM.Common.Models" Version="0.0.6" />
         <PackageReference Include="IM.Common.Redis.DistributedCache" Version="0.0.1" />
+        <PackageReference Include="IM.IdentityService.Common" Version="0.0.3" /> 
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.7" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\IM.IdentityService.Client\IM.IdentityService.Client.csproj" />
-      <ProjectReference Include="..\..\src\IM.IdentityService.Common\IM.IdentityService.Common.csproj" />
     </ItemGroup>
 
 </Project>
