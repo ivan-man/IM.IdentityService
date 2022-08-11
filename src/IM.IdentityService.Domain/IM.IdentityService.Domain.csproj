@@ -19,8 +19,4 @@
       <ProjectReference Include="..\IM.IdentityService.Common\IM.IdentityService.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Extensions" />
-    </ItemGroup>
-
 </Project>
