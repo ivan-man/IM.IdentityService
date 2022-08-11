@@ -42,7 +42,7 @@ internal class IdentityService : IIdentityService
             PhoneNumber = request.PhoneNumber,
             Password = request.Password,
             ConfirmPassword = request.ConfirmPassword,
-            ApplicationId = request.ApplicationId,
+            AppKey = request.AppKey,
         }, token);
 
         return result;

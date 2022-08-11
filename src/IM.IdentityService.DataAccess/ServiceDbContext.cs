@@ -46,10 +46,13 @@ public sealed class ServiceDbContext : IdentityDbContext<ApplicationUser, Applic
             .HasKey(q => new { q.ApplicationUserId, q.ApplicationId });
 
         modelBuilder.Entity<ApplicationUsing>()
-            .HasIndex(q => new { q.ApplicationUserId });
-        
+            .HasIndex(q => q.ApplicationUserId);
+
         modelBuilder.Entity<ApplicationUsing>()
-            .HasIndex(q => new { q.ApplicationId });
+            .HasIndex(q => q.ApplicationId);
+
+        modelBuilder.Entity<Application>()
+            .HasIndex(q => q.AppKey);
     }
 
     private static ILoggerFactory? GetDbLoggerFactory()
