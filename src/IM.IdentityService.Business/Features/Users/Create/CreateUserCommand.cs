@@ -11,5 +11,5 @@ public class CreateUserCommand : IRequest<Result>
     public string? PhoneNumber { get; set; }
     public string Password { get; set; }
     public string ConfirmPassword { get; set; }
-    public int ApplicationId { get; set; }
+    public string AppKey { get; set; }
 }

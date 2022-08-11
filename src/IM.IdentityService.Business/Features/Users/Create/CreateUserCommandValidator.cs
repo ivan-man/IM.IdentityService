@@ -6,8 +6,8 @@ public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
 {
     public CreateUserCommandValidator()
     {
-        RuleFor(x => x.ApplicationId).Must(x => x > 0)
-            .WithMessage("Invalid application Id");
+        RuleFor(x => x.AppKey).NotEmpty()
+            .WithMessage("Invalid Application key");
         
         RuleFor(x => x.UserName).NotEmpty()
             .When(x => string.IsNullOrWhiteSpace(x.Email) && string.IsNullOrWhiteSpace(x.PhoneNumber))
