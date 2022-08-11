@@ -4,6 +4,7 @@ using IM.Common.Grpc;
 using IM.Common.Models;
 using IM.IdentityService.Client.Internal;
 using IM.IdentityService.Client.Internal.Users;
+using IM.IdentityService.Client.Settings;
 using IM.IdentityService.Common.Consts;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +16,7 @@ namespace IM.IdentityService.Client;
 
 public static class DependencyInjection
 {
-    private const string DefaultSection = "Identity:url";
+    private const string DefaultSection = "Identity";
 
     public static IServiceCollection AddImIdentityClient(
         this IServiceCollection services,
@@ -23,6 +24,7 @@ public static class DependencyInjection
         string sectionName = DefaultSection)
     {
         return services
+            .Configure<IdentitySettings>(options => configuration.GetSection(sectionName).Bind(options))
             .AddGRpcService<IIdentityService>(configuration, sectionName);
     }
 

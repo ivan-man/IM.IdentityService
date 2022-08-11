@@ -44,7 +44,7 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services
     .AddDistributedCacheRedis(builder.Configuration, sectionName: "redis")
     .AddHttpContextAccessor()
-    .AddImIdentityClient(builder.Configuration, sectionName: "Identity:demo")
+    .AddImIdentityClient(builder.Configuration, sectionName: "Identity")
     .AddImAuthorization();
 
 var app = builder.Build();
