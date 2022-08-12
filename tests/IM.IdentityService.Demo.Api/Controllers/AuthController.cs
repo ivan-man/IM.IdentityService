@@ -1,8 +1,10 @@
 ﻿using IM.Common.Models;
 using IM.IdentityService.Client;
 using IM.IdentityService.Client.Models;
+using IM.IdentityService.Client.Settings;
 using IM.IdentityService.Common.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 namespace IM.IdentityService.Demo.Api.Controllers;
 
@@ -12,11 +14,16 @@ public class AuthController : ControllerBase
 {
     private readonly ILogger<AuthController> _logger;
     private readonly IIdentityService _identityService;
-
-    public AuthController(ILogger<AuthController> logger, IIdentityService identityService)
+    private readonly IdentitySettings _identitySettings;
+    
+    public AuthController(
+        IIdentityService identityService, 
+        IOptions<IdentitySettings> identitySettings, 
+        ILogger<AuthController> logger)
     {
         _logger = logger;
         _identityService = identityService;
+        _identitySettings = identitySettings.Value;
     }
 
     /// <summary>
@@ -29,6 +36,7 @@ public class AuthController : ControllerBase
     {
         try
         {
+            request.AppKey = _identitySettings.AppKey;
             var registerResult = await _identityService.CreateUser(request, HttpContext.RequestAborted);
             if (registerResult.Success)
                 return Ok();
