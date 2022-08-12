@@ -37,10 +37,16 @@ public sealed class ServiceDbContext : IdentityDbContext<ApplicationUser, Applic
             .HasOne<ApplicationUser>();
 
         modelBuilder.Entity<ApplicationUser>()
-            .HasIndex(q => q.NormalizedUserName);
+            .HasIndex(q => q.NormalizedUserName)
+            .IsUnique();
 
         modelBuilder.Entity<ApplicationUser>()
-            .HasIndex(q => q.NormalizedEmail);
+            .HasIndex(q => q.NormalizedEmail)
+            .IsUnique();
+
+        modelBuilder.Entity<ApplicationUser>()
+            .HasIndex(q => q.PhoneNumber)
+            .IsUnique();
 
         modelBuilder.Entity<ApplicationUsing>()
             .HasKey(q => new { q.ApplicationUserId, q.ApplicationId });

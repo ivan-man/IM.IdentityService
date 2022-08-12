@@ -3,8 +3,7 @@ using IM.IdentityService.Business.Features.Login;
 using IM.IdentityService.Business.Features.TokenValidation;
 using IM.IdentityService.Business.Features.Users.Create;
 using IM.IdentityService.Client;
-using IM.IdentityService.Client.Models;
-using IM.IdentityService.Common.Models;
+using IM.IdentityService.Common.Contracts;
 using Mapster;
 using MediatR;
 
@@ -25,8 +24,8 @@ internal class IdentityService : IIdentityService
         return result;
     }
 
-    public async ValueTask<Result<ResponseToken>> Login(
-        LoginModel request,
+    public async ValueTask<Result<TokenResponse>> Login(
+        LoginRequest request,
         CancellationToken token = default)
     {
         var result = await _mediator.Send(request.Adapt<LoginCommand>(), token);

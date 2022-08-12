@@ -1,8 +1,8 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using IM.Common.Models;
-using IM.IdentityService.Client.Models;
 using IM.IdentityService.Common.Consts;
+using IM.IdentityService.Common.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;

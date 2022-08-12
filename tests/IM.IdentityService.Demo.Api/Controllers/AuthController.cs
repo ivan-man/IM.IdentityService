@@ -1,5 +1,4 @@
-﻿using IM.Common.Models;
-using IM.IdentityService.Client;
+﻿using IM.IdentityService.Client;
 using IM.IdentityService.Client.Models;
 using IM.IdentityService.Client.Settings;
 using IM.IdentityService.Common.Models;

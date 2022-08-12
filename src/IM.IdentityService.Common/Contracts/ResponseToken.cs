@@ -1,9 +1,9 @@
 ﻿using System.Runtime.Serialization;
 
-namespace IM.IdentityService.Common.Models;
+namespace IM.IdentityService.Common.Contracts;
 
 [DataContract]
-public class ResponseToken
+public class TokenResponse
 {
     [DataMember(Order = 1)] public string AccessToken { get; set; }
     [DataMember(Order = 2)] public string Refresh { get; set; }

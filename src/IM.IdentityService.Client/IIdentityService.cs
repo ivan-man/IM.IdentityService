@@ -1,7 +1,6 @@
 ﻿using IM.Common.Models;
-using IM.IdentityService.Client.Models;
-using IM.IdentityService.Common.Models;
 using System.ServiceModel;
+using IM.IdentityService.Common.Contracts;
 
 namespace IM.IdentityService.Client;
 
@@ -15,5 +14,5 @@ public interface IIdentityService
     ValueTask<Result> CreateUser(CreateUserRequest request, CancellationToken token = default);
 
     [OperationContract]
-    ValueTask<Result<ResponseToken>> Login(LoginModel request, CancellationToken token = default);
+    ValueTask<Result<TokenResponse>> Login(LoginRequest request, CancellationToken token = default);
 }

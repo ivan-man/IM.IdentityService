@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace IM.IdentityService.Client.Models;
+namespace IM.IdentityService.Common.Contracts;
 
 [DataContract]
 public class CreateUserRequest

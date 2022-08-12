@@ -1,4 +1,5 @@
 ﻿using IM.Common.Models;
+using IM.IdentityService.Business.InternalServices;
 using IM.IdentityService.DataAccess;
 using IM.IdentityService.Domain.Models;
 using MediatR;
@@ -36,7 +37,7 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
         {
             UserName = request.UserName ?? string.Empty,
             Email = request.Email,
-            PhoneNumber = request.PhoneNumber,
+            PhoneNumber = request.PhoneNumber?.NormalizePhone(),
         };
 
         var result = await _userManager.CreateAsync(user, request.Password);

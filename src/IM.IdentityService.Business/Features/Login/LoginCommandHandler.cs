@@ -3,7 +3,8 @@ using IM.IdentityService.Business.InternalServices;
 using IM.IdentityService.Business.InternalServices.Tokens;
 using IM.IdentityService.Business.InternalServices.Totp;
 using IM.IdentityService.Business.Models;
-using IM.IdentityService.Common.Models;
+using IM.IdentityService.Common.Contracts;
+using IM.IdentityService.DataAccess;
 using IM.IdentityService.Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
@@ -12,9 +13,10 @@ using Microsoft.Extensions.Logging;
 
 namespace IM.IdentityService.Business.Features.Login;
 
-public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<ResponseToken>>
+public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenResponse>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ServiceDbContext _dbContext;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly IJwtTokenGenerator _tokenGenerator;
     // private readonly ITotpGenerator _totpGenerator;
@@ -25,6 +27,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<Response
         SignInManager<ApplicationUser> signInManager,
         IJwtTokenGenerator tokenGenerator,
         // ITotpGenerator totpGenerator,
+        ServiceDbContext dbContext,
         ILogger<LoginCommandHandler> logger)
     {
         _userManager = userManager;
@@ -32,49 +35,60 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<Response
         _tokenGenerator = tokenGenerator;
         // _totpGenerator = totpGenerator;
         _logger = logger;
+        _dbContext = dbContext;
     }
 
-    public async Task<Result<ResponseToken>> Handle(LoginCommand request, CancellationToken cancellationToken)
+    public async Task<Result<TokenResponse>> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         ApplicationUser? user = null;
 
+        var usersQuery = _userManager.Users
+            .Include(q => q.ApplicationUsings);
+            
         if (!string.IsNullOrWhiteSpace(request.UserName))
             user = await _userManager.FindByNameAsync(request.UserName);
 
         if (!string.IsNullOrWhiteSpace(request.Email))
-            user = await _userManager.FindByEmailAsync(request.UserName);
+            user = await _userManager.FindByEmailAsync(request.Email);
 
         if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
-            user = await _userManager.Users.FirstOrDefaultAsync(
+            user = await usersQuery.FirstOrDefaultAsync(
                 q => q.PhoneNumber == request.PhoneNumber.NormalizePhone(), 
                 cancellationToken: cancellationToken);
-
         if (user == null)
         {
             _logger.LogWarning("User not found {@Request}", request);
-            return Result<ResponseToken>.NotFound("User not found");
+            return Result<TokenResponse>.NotFound("User not found");
         }
 
         if (user.LockoutEnd != null)
         {
-            return Result<ResponseToken>.Forbidden("Account locked");
+            return Result<TokenResponse>.Forbidden("Account locked");
         }
             
         if (!await _userManager.CheckPasswordAsync(user, request.Password))
         {
             _logger.LogWarning("{UserId} provided invalid password", user.Id);
-            return Result<ResponseToken>.Bad("Invalid password");
+            return Result<TokenResponse>.Bad("Invalid password");
         }
 
         if (user.TwoFactorEnabled)
         {
             //ToDo send email/sms 
+            throw new NotImplementedException();
         }
+
+        var isUserRegisteredInApp = await _dbContext.Users.AnyAsync(q =>
+            q.Id == user.Id && user.ApplicationUsings.Any(au => au.Application.AppKey == request.AppKey), cancellationToken: cancellationToken);
+        
+        if(!isUserRegisteredInApp)
+            return Result<TokenResponse>.Forbidden("User does not have access to this application");
         
         var access = await _tokenGenerator.Generate(user, cancellationToken: cancellationToken);
+        
         // var totp = await _totpGenerator.GenerateToken(user, cancellationToken: cancellationToken);
         
-        return Result<ResponseToken>.Ok(new ResponseToken
+        return Result<TokenResponse>.Ok(new TokenResponse
         {
             IsNeed2FA = user.TwoFactorEnabled,
             AccessToken = access.Token,
