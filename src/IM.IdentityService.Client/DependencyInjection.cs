@@ -23,9 +23,12 @@ public static class DependencyInjection
         IConfiguration configuration,
         string sectionName = DefaultSection)
     {
+        var identitySettings = new IdentitySettings();
+        configuration.GetSection(sectionName).Bind(identitySettings);
+
         return services
             .Configure<IdentitySettings>(options => configuration.GetSection(sectionName).Bind(options))
-            .AddGRpcService<IIdentityService>(configuration, sectionName);
+            .AddGRpcService<IIdentityService>(configuration, $"{sectionName}:{nameof(IdentitySettings.Address)}");
     }
 
     public static IServiceCollection AddImAuthorization(
