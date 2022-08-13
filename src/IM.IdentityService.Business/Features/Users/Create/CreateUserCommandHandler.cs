@@ -1,5 +1,6 @@
 ﻿using IM.Common.Models;
 using IM.IdentityService.Business.InternalServices;
+using IM.IdentityService.Common.Contracts;
 using IM.IdentityService.DataAccess;
 using IM.IdentityService.Domain.Models;
 using MediatR;
@@ -9,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 namespace IM.IdentityService.Business.Features.Users.Create;
 
-public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result>
+public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Result<UserCreatedResponse>>
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<CreateUserCommandHandler> _logger;
@@ -25,14 +26,15 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
         _userManager = userManager;
     }
 
-    public async Task<Result> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UserCreatedResponse>> Handle(CreateUserCommand request,
+        CancellationToken cancellationToken)
     {
         var isAppKeyCorrect = await _dataContext.Applications
             .AnyAsync(q => q.AppKey.Equals(request.AppKey), cancellationToken: cancellationToken);
-        
-        if(!isAppKeyCorrect)
-            return Result.Bad("Invalid application key");
-        
+
+        if (!isAppKeyCorrect)
+            return Result<UserCreatedResponse>.Bad("Invalid application key");
+
         var user = new ApplicationUser
         {
             UserName = request.UserName ?? string.Empty,
@@ -42,6 +44,12 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 
         var result = await _userManager.CreateAsync(user, request.Password);
 
-        return result.Succeeded ? Result.Ok() : Result.Failed(result.ToString());
+        return result.Succeeded
+            ? Result<UserCreatedResponse>.Ok(new UserCreatedResponse
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+            })
+            : Result<UserCreatedResponse>.Failed(result.ToString());
     }
 }

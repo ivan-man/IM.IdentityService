@@ -32,7 +32,7 @@ internal class IdentityService : IIdentityService
         return result;
     }
 
-    public async ValueTask<Result> CreateUser(CreateUserRequest request, CancellationToken token = default)
+    public async ValueTask<Result<UserCreatedResponse>> CreateUser(CreateUserRequest request, CancellationToken token = default)
     {
         var result = await _mediator.Send(new CreateUserCommand
         {

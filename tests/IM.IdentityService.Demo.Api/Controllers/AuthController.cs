@@ -1,7 +1,8 @@
 ﻿using IM.IdentityService.Client;
-using IM.IdentityService.Client.Models;
 using IM.IdentityService.Client.Settings;
-using IM.IdentityService.Common.Models;
+using IM.IdentityService.Common.Contracts;
+using IM.IdentityService.Demo.Api.Models;
+using Mapster;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
@@ -31,11 +32,13 @@ public class AuthController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] CreateUserRequest request)
+    public async Task<IActionResult> Register([FromBody] CreateUserDto dto)
     {
         try
         {
+            var request = dto.Adapt<CreateUserRequest>();
             request.AppKey = _identitySettings.AppKey;
+            
             var registerResult = await _identityService.CreateUser(request, HttpContext.RequestAborted);
             if (registerResult.Success)
                 return Ok();
@@ -53,7 +56,7 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <returns>Access Token</returns>
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginModel request)
+    public async Task<IActionResult> Login([FromBody] LoginRequest request)
     {
         try
         {

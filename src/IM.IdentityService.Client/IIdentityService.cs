@@ -11,7 +11,7 @@ public interface IIdentityService
     ValueTask<Result> ValidateToken(ValidateTokenRequest request, CancellationToken token = default);
 
     [OperationContract]
-    ValueTask<Result> CreateUser(CreateUserRequest request, CancellationToken token = default);
+    ValueTask<Result<UserCreatedResponse>> CreateUser(CreateUserRequest request, CancellationToken token = default);
 
     [OperationContract]
     ValueTask<Result<TokenResponse>> Login(LoginRequest request, CancellationToken token = default);
