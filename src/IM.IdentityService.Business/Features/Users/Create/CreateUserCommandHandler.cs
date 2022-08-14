@@ -26,30 +26,47 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
         _userManager = userManager;
     }
 
-    public async Task<Result<UserCreatedResponse>> Handle(CreateUserCommand request,
+    public async Task<Result<UserCreatedResponse>> Handle(
+        CreateUserCommand request,
         CancellationToken cancellationToken)
     {
-        var isAppKeyCorrect = await _dataContext.Applications
-            .AnyAsync(q => q.AppKey.Equals(request.AppKey), cancellationToken: cancellationToken);
-
-        if (!isAppKeyCorrect)
-            return Result<UserCreatedResponse>.Bad("Invalid application key");
-
-        var user = new ApplicationUser
+        try
         {
-            UserName = request.UserName ?? string.Empty,
-            Email = request.Email,
-            PhoneNumber = request.PhoneNumber?.NormalizePhone(),
-        };
+            var application = await _dataContext.Applications
+                .FirstOrDefaultAsync(q => q.AppKey.Equals(request.AppKey), cancellationToken: cancellationToken);
 
-        var result = await _userManager.CreateAsync(user, request.Password);
+            if (application == null)
+                return Result<UserCreatedResponse>.Bad("Invalid application key");
 
-        return result.Succeeded
-            ? Result<UserCreatedResponse>.Ok(new UserCreatedResponse
+            var user = new ApplicationUser
             {
-                Id = user.Id,
-                UserName = user.UserName,
-            })
-            : Result<UserCreatedResponse>.Failed(result.ToString());
+                UserName = request.UserName ?? request.Email ?? request.PhoneNumber,
+                Email = request.Email,
+                PhoneNumber = request.PhoneNumber?.NormalizePhone(),
+            };
+
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+            await _dataContext.ApplicationUsings.AddAsync(
+                new ApplicationUsing
+                {
+                    ApplicationUserId = user.Id, ApplicationId = application.Id
+                }, cancellationToken);
+
+            await _dataContext.SaveChangesAsync(cancellationToken);
+
+            return result.Succeeded
+                ? Result<UserCreatedResponse>.Ok(new UserCreatedResponse
+                {
+                    Id = user.Id,
+                    UserName = user.UserName,
+                })
+                : Result<UserCreatedResponse>.Failed(result.ToString());
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to create user");
+            return Result<UserCreatedResponse>.Internal("Failed to create user");
+        }
     }
 }

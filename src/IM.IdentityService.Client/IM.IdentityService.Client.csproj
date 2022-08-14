@@ -4,7 +4,7 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageVersion>0.0.10</PackageVersion>
+        <PackageVersion>0.0.11</PackageVersion>
         <Authors>ivan-man</Authors>
         <PackageProjectUrl>https://github.com/ivan-man/IM.IdentityService</PackageProjectUrl>
         <RepositoryUrl>https://github.com/ivan-man/IM.IdentityService</RepositoryUrl>
@@ -12,8 +12,8 @@
 
     <ItemGroup>
       <PackageReference Include="IM.Common.Grpc" Version="0.0.2" />
-      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.7" />
-      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.7" />
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
+      <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.8" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
       <PackageReference Include="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
