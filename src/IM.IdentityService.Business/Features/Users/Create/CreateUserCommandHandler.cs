@@ -47,6 +47,9 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
+            if (!result.Succeeded)
+                return Result<UserCreatedResponse>.Failed(result.ToString());
+
             await _dataContext.ApplicationUsings.AddAsync(
                 new ApplicationUsing
                 {
@@ -55,13 +58,11 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
 
             await _dataContext.SaveChangesAsync(cancellationToken);
 
-            return result.Succeeded
-                ? Result<UserCreatedResponse>.Ok(new UserCreatedResponse
-                {
-                    Id = user.Id,
-                    UserName = user.UserName,
-                })
-                : Result<UserCreatedResponse>.Failed(result.ToString());
+            return Result<UserCreatedResponse>.Ok(new UserCreatedResponse
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+            });
         }
         catch (Exception e)
         {

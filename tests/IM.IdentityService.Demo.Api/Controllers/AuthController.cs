@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost("register")]
-    public async Task<IActionResult> Register([FromBody] CreateUserDto dto)
+    public async Task<IActionResult> Register([FromBody] CreateUserViewModel dto)
     {
         try
         {
@@ -56,10 +56,13 @@ public class AuthController : ControllerBase
     /// </summary>
     /// <returns>Access Token</returns>
     [HttpPost("login")]
-    public async Task<IActionResult> Login([FromBody] LoginRequest request)
+    public async Task<IActionResult> Login([FromBody] LoginViewModel requestViewModel)
     {
         try
         {
+            var request = requestViewModel.Adapt<LoginRequest>();
+            request.AppKey = _identitySettings.AppKey;
+
             var registerResult = await _identityService.Login(request, HttpContext.RequestAborted);
             if (registerResult.Success)
                 return Ok(registerResult.Data);

@@ -84,8 +84,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
                 throw new NotImplementedException();
             }
 
-            var isUserRegisteredInApp = await _dbContext.Users.AnyAsync(q =>
-                    q.Id == user.Id && user.ApplicationUsings.Any(au => au.Application.AppKey == request.AppKey),
+            var isUserRegisteredInApp = await _dbContext.ApplicationUsings.AnyAsync(q =>
+                    q.ApplicationUserId == user.Id && q.Application.AppKey == request.AppKey,
                 cancellationToken: cancellationToken);
 
             if (!isUserRegisteredInApp)

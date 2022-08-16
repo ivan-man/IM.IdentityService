@@ -81,6 +81,7 @@ public sealed class ServiceDbContext : IdentityDbContext<ApplicationUser, Applic
         if (e.Entry.Entity is not IBaseEntity entity)
             return;
 
+        //It does not work on creating, because state of entity is 'Unchanged'
         switch (e.Entry.State)
         {
             case EntityState.Modified:

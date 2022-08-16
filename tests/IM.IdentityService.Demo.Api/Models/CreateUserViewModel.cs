@@ -1,6 +1,6 @@
 ﻿namespace IM.IdentityService.Demo.Api.Models;
 
-public class CreateUserDto
+public class CreateUserViewModel
 {
     public string? UserName { get; set; }
 
