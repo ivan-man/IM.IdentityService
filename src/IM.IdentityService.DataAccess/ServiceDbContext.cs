@@ -69,11 +69,9 @@ public sealed class ServiceDbContext : IdentityDbContext<ApplicationUser, Applic
         modelBuilder.Entity<ApplicationUsing>()
             .HasIndex(q => q.ApplicationUserId);
 
-        modelBuilder.Entity<ApplicationUsing>()
-            .HasIndex(q => q.ApplicationId);
-
         modelBuilder.Entity<Application>()
-            .HasIndex(q => q.AppKey);
+            .HasIndex(q => q.AppKey)
+            .IsUnique();
     }
     
     private void OnEntityStateChanged(object? sender, EntityStateChangedEventArgs e)

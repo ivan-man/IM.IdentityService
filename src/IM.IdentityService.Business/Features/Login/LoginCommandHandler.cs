@@ -63,6 +63,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
 
             if (user == null)
             {
+                request.Password = string.Empty;
                 _logger.LogWarning("User not found {@Request}", request);
                 return Result<TokenResponse>.NotFound("User not found");
             }

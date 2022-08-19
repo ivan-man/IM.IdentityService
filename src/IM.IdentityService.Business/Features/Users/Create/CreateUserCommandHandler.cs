@@ -33,14 +33,15 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
         try
         {
             var application = await _dataContext.Applications
-                .FirstOrDefaultAsync(q => q.AppKey.Equals(request.AppKey), cancellationToken: cancellationToken);
+                .FirstOrDefaultAsync(q => q.AppKey.Equals(request.AppKey), cancellationToken);
 
             if (application == null)
                 return Result<UserCreatedResponse>.Bad("Invalid application key");
 
             var user = new ApplicationUser
             {
-                UserName = request.UserName ?? request.Email ?? request.PhoneNumber,
+                UserName = request.UserName ?? request.Email ?? request.PhoneNumber 
+                    ?? throw new InvalidOperationException("Failed to set Username. Check validator."),
                 Email = request.Email,
                 PhoneNumber = request.PhoneNumber?.NormalizePhone(),
             };
