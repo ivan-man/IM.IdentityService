@@ -4,14 +4,14 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <PackageVersion>0.0.12</PackageVersion>
+        <PackageVersion>0.0.13</PackageVersion>
         <Authors>ivan-man</Authors>
         <PackageProjectUrl>https://github.com/ivan-man/IM.IdentityService</PackageProjectUrl>
         <RepositoryUrl>https://github.com/ivan-man/IM.IdentityService</RepositoryUrl>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="IM.Common.Grpc" Version="0.0.2" />
+      <PackageReference Include="IM.Common.Grpc" Version="0.0.3" />
       <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
       <PackageReference Include="Microsoft.AspNetCore.Authorization" Version="6.0.8" />
       <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
@@ -21,7 +21,7 @@
       <PackageReference Include="protobuf-net.Grpc.AspNetCore" Version="1.0.152" />
       <PackageReference Include="protobuf-net.Grpc.AspNetCore.Reflection" Version="1.0.152" />
       <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.22.0" />
-      <PackageReference Include="System.ServiceModel.Primitives" Version="4.9.0" />
+      <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.0" />
     </ItemGroup>
 
     <ItemGroup>

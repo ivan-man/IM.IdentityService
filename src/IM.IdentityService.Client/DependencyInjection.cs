@@ -28,7 +28,7 @@ public static class DependencyInjection
 
         return services
             .Configure<IdentitySettings>(options => configuration.GetSection(sectionName).Bind(options))
-            .AddGRpcService<IIdentityService>(configuration, $"{sectionName}:{nameof(IdentitySettings.Address)}");
+            .AddGrpcService<IIdentityService>(configuration, $"{sectionName}:{nameof(IdentitySettings.Address)}");
     }
 
     public static IServiceCollection AddImAuthorization(
@@ -78,7 +78,7 @@ public static class DependencyInjection
 
                 var token = context.Request.Query["access_token"].ToString().Split(' ');
                 context.Token = token.Length <= 1 ? token[0] : token[1];
-                return Task.CompletedTask;
+                return Task.CompletedTask; 
             },
             OnAuthenticationFailed = async context =>
             {
