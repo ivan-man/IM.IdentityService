@@ -2,7 +2,6 @@
 
 public class JwtConfig
 {
-    public string Secret { get; set; }
     public string SecretTemp { get; set; }
     public int AccessTtl { get; set; } = 5;
     public int TempTtl { get; set; } = 1;

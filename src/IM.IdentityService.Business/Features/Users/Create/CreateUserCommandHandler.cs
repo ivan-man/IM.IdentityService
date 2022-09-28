@@ -33,7 +33,8 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
         try
         {
             var application = await _dataContext.Applications
-                .FirstOrDefaultAsync(q => q.AppKey.Equals(request.AppKey), cancellationToken);
+                .FirstOrDefaultAsync(q => q.AppKey.Equals(request.AppKey), cancellationToken)
+                .ConfigureAwait(false);
 
             if (application == null)
                 return Result<UserCreatedResponse>.Bad("Invalid application key");
@@ -55,9 +56,11 @@ public class CreateUserCommandHandler : IRequestHandler<CreateUserCommand, Resul
                 new ApplicationUsing
                 {
                     ApplicationUserId = user.Id, ApplicationId = application.Id
-                }, cancellationToken);
+                }, cancellationToken)
+                .ConfigureAwait(false);
 
-            await _dataContext.SaveChangesAsync(cancellationToken);
+            await _dataContext.SaveChangesAsync(cancellationToken)
+                .ConfigureAwait(false);
 
             return Result<UserCreatedResponse>.Ok(new UserCreatedResponse
             {

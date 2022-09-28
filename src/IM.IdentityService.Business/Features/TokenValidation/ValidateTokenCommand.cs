@@ -7,4 +7,5 @@ public class ValidateTokenCommand : IRequest<Result>
 {
     public bool Temp { get; set; }
     public string Token { get; set; }
+    public string AppKey { get; set; }
 }

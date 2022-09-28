@@ -20,7 +20,9 @@ internal class IdentityService : IIdentityService
 
     public async ValueTask<Result> ValidateToken(ValidateTokenRequest request, CancellationToken token = default)
     {
-        var result = await _mediator.Send(request.Adapt<ValidateTokenCommand>(), token);
+        var result = await _mediator.Send(request.Adapt<ValidateTokenCommand>(), token)
+            .ConfigureAwait(false);
+        
         return result;
     }
 
@@ -28,7 +30,9 @@ internal class IdentityService : IIdentityService
         LoginRequest request,
         CancellationToken token = default)
     {
-        var result = await _mediator.Send(request.Adapt<LoginCommand>(), token);
+        var result = await _mediator.Send(request.Adapt<LoginCommand>(), token)
+            .ConfigureAwait(false);
+        
         return result;
     }
 
@@ -42,7 +46,8 @@ internal class IdentityService : IIdentityService
             Password = request.Password,
             ConfirmPassword = request.ConfirmPassword,
             AppKey = request.AppKey,
-        }, token);
+        }, token).ConfigureAwait(false);
+        
 
         return result;
     }

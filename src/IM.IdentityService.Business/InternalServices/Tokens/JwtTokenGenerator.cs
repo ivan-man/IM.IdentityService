@@ -29,12 +29,12 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _logger = logger;
     }
 
-    public async Task<TokenModel> Generate(ApplicationUser user, bool? temp = false,
+    public async Task<TokenModel> Generate(ApplicationUser user, string appKey, bool? temp = false,
         CancellationToken cancellationToken = default)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(temp ?? false ? _jwtConfig.SecretTemp : _jwtConfig.Secret);
-        var roles = await _userManager.GetRolesAsync(user);
+        var key = Encoding.UTF8.GetBytes(temp ?? false ? _jwtConfig.SecretTemp : appKey);
+        var roles = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
         var claims = new List<Claim>
         {
@@ -76,12 +76,12 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         };
     }
 
-    public Task<Result> Validate(string token, bool temp, CancellationToken cancellationToken = default)
+    public Task<Result> Validate(string token, string appKey, bool temp, CancellationToken cancellationToken = default)
     {
         Claim? userIdClaim = null;
 
         var jwtTokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(temp ? _jwtConfig.SecretTemp : _jwtConfig.Secret);
+        var key = Encoding.UTF8.GetBytes(temp ? _jwtConfig.SecretTemp : appKey);
 
         try
         {

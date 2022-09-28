@@ -19,21 +19,18 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
 
     private readonly IJwtTokenGenerator _tokenGenerator;
 
-    // private readonly ITotpGenerator _totpGenerator;
     private readonly ILogger<LoginCommandHandler> _logger;
 
     public LoginCommandHandler(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IJwtTokenGenerator tokenGenerator,
-        // ITotpGenerator totpGenerator,
         ServiceDbContext dbContext,
         ILogger<LoginCommandHandler> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _tokenGenerator = tokenGenerator;
-        // _totpGenerator = totpGenerator;
         _logger = logger;
         _dbContext = dbContext;
     }
@@ -48,18 +45,22 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
                 .Include(q => q.ApplicationUsings);
 
             if (!string.IsNullOrWhiteSpace(request.UserName))
-                user = await _userManager.FindByNameAsync(request.UserName);
+                user = await _userManager.FindByNameAsync(request.UserName)
+                    .ConfigureAwait(false);
 
             if (!string.IsNullOrWhiteSpace(request.Email))
-                user = await _userManager.FindByEmailAsync(request.Email);
+                user = await _userManager.FindByEmailAsync(request.Email)
+                    .ConfigureAwait(false);
 
             if (!string.IsNullOrWhiteSpace(request.PhoneNumber))
                 user = await usersQuery.FirstOrDefaultAsync(
                     q => q.PhoneNumber == request.PhoneNumber.NormalizePhone(),
-                    cancellationToken: cancellationToken);
+                    cancellationToken: cancellationToken)
+                    .ConfigureAwait(false);
 
             if (request.UserId.HasValue && request.UserId != Guid.Empty)
-                user = await _userManager.FindByIdAsync(request.UserId.ToString());
+                user = await _userManager.FindByIdAsync(request.UserId.ToString())
+                    .ConfigureAwait(false);
 
             if (user == null)
             {
@@ -73,7 +74,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
                 return Result<TokenResponse>.Forbidden("Account locked");
             }
 
-            if (!await _userManager.CheckPasswordAsync(user, request.Password))
+            if (!await _userManager.CheckPasswordAsync(user, request.Password).ConfigureAwait(false))
             {
                 _logger.LogWarning("{UserId} provided invalid password", user.Id);
                 return Result<TokenResponse>.Bad("Invalid password");
@@ -90,17 +91,15 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<TokenRes
                 cancellationToken: cancellationToken);
 
             if (!isUserRegisteredInApp)
-                return Result<TokenResponse>.Forbidden("User does not have access to this application");
+                return Result<TokenResponse>.UnAuthorized("User does not have access to this application");
 
-            var access = await _tokenGenerator.Generate(user, cancellationToken: cancellationToken);
+            var access = await _tokenGenerator.Generate(user, request.AppKey, cancellationToken: cancellationToken);
 
-            // var totp = await _totpGenerator.GenerateToken(user, cancellationToken: cancellationToken);
 
             return Result<TokenResponse>.Ok(new TokenResponse
             {
                 IsNeed2FA = user.TwoFactorEnabled,
                 AccessToken = access.Token,
-                // Hash = totp.Hash
             });
         }
         catch (Exception e)

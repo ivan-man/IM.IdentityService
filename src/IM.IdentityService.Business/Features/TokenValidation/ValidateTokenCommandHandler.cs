@@ -16,7 +16,9 @@ public class ValidateTokenCommandHandler : IRequestHandler<ValidateTokenCommand,
 
     public async Task<Result> Handle(ValidateTokenCommand request, CancellationToken cancellationToken)
     {
-        var validationResult = await _jwtGenerator.Validate(request.Token, request.Temp, cancellationToken);
+        var validationResult = await _jwtGenerator.Validate(request.Token, request.AppKey, request.Temp, cancellationToken)
+            .ConfigureAwait(false);
+        
         return validationResult;
     }
 }
